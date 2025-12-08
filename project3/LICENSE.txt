@@ -1,0 +1,23 @@
+EULA License for ...
+Copyright (C) 2025, Perugia, Via Elce di sotto 8, Italy.
+All rights reserved.
+
+EULA (End-User License Agreement) 
+TERMS AND CONDITIONS FOR USING, DISTRIBUTION AND MODIFICATION
+The producers give a non exclusive license, not tranferible and limited to accademic use, research and
+internal developping. This license does not gives intellectual property rights.
+The user can download the code once purchased it, these terms are accettble by the user once purchased
+the code. There is no refund right in case of not accepting these terms. The user can uses the 
+purchased code just in one single device belonging to the research group. In order to use thhis code
+on many devices it's necessary to purchase and accept these terms again.
+The user can uses this code only for molecular dynamic simulation, potential energy calculation and for 
+data export for accademic release. Any accademic releases must contain this code name, if used for 
+obtaining any kind of data specified in the paper. 
+It's streactly forbidden modifing or decompiling the code; using this code for commercial interest if not
+allowed by the producers. It's also forbidden the useing of this code in any dangerous applications,
+such as medical and industrials. The code it's not distributable or accessible to third parties.
+The code is not usebal for projecting conventional weapons, drugs or chemical weapons.
+The producers can releas patch or updates in any time. Those updates or patchs are not for free, the user
+has to download those patchs or updates in order to keep on using the code. The tecnical support is
+guranted only under payment.
+
