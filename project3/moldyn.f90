@@ -189,6 +189,43 @@ end function T
 
 
 
+! calculating the acceleration for each atom
+subroutine compute_acc(Natoms, coord, mass, dist, acc)
+        implicit none
+        integer, intent(in) :: Natoms
+        integer :: i,j
+        double precision, intent(in) :: coord(Natoms,3)
+        double precision, intent(in) :: dist(Natoms,Natoms)
+        double precision, intent(in) :: mass(Natoms)
+        double precision, intent(out) :: acc(Natoms,3)
+        double precision :: eps,sig,ax,ay,az,rij,u,dpot
+
+do i=1, Natoms
+ ax=0.D0
+ ay=0.D0
+ az=0.D0
+ do j=1, Natoms
+  if (i==j) then
+   ax=ax+0.D0
+   ay=ay+0.D0
+   az=az+0.D0
+  else 
+   u=dpot(eps, sig, dist(i,j))
+   rij=dist(i,j)
+   ax=ax+u*(coord(i,1)-coord(j,1))/rij
+   ay=ay+u*(coord(i,2)-coord(j,2))/rij
+   az=az+u*(coord(i,3)-coord(j,3))/rij
+  endif
+ enddo 
+ acc(i,1)=-1.D0/mass(i)*ax
+ acc(i,2)=-1.D0/mass(i)*ay
+ acc(i,3)=-1.D0/mass(i)*az
+enddo
+
+
+
+
+end subroutine compute_acc
 
 
 
@@ -199,7 +236,17 @@ end function T
 
 
 
+double precision function dpot(eps, sig, r) result(u)
+        implicit none
+        double precision, intent(in) :: eps, sig
+        double precision, intent(in) :: r
+        double precision :: d,l,p
 
+d=24.D0*eps/r
+l=2.D0*(sig/r)**12
+p=(sig/r)**6
+u=d*(p-l)
+end function dpot
 
 
 
