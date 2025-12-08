@@ -146,28 +146,46 @@ integer, intent(in) :: n
 doubleprecision, intent(out) :: c(n,3)
 doubleprecision, intent(out) :: m(n)
 do i=1,n
-read(*,*) c(i,1), c(i,2), c(i,3), m(i)
+ read(*,*) c(i,1), c(i,2), c(i,3), m(i)
 end do
 end subroutine read_mol
 
 double precision function v(eps, sig, n, dis)
         implicit none
-        integer :: d, l, p, i, t
+        integer ::  i, t
         double precision, intent(in) :: eps, sig
         integer, intent(in) :: n
         double precision, intent(in) :: dis(n,n)
-
+        double precision :: d,l,p
+        
+v=0.D0
 do i=1,n
-do t=i+1,n
-d=4*eps
-l=(sig/dis(i,t))**12
-p=(sig/dis(i,t))**6
-v=d*(l-p)
-end do
+ do t=i+1,n
+  d=4.D0*eps
+  l=(sig/dis(i,t))**12
+  p=(sig/dis(i,t))**6
+  v=v+d*(l-p)
+ end do
 end do
 end function v
 
 
+! calculating the kinetic energy
+double precision function T(Natoms, vel, mass)
+        implicit none
+        integer, intent(in) :: Natoms
+        double precision, intent(in) :: vel(Natoms,3)
+        double precision, intent(in) :: mass(Natoms)
+        double precision :: xvel, yvel, zvel
+        integer :: i
+do i=1, Natoms
+ xvel=vel(i,1)**2                       ! calculating the square of each component of the velocity
+ yvel=vel(i,2)**2                       !        
+ zvel=vel(i,3)**2                       !
+ T=T+mass(i)*(xvel+yvel+zvel)           ! updating the total kinetic energy
+enddo
+T=0.5D0*T
+end function T
 
 
 
