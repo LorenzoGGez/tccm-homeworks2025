@@ -1,105 +1,102 @@
 program mol_dyn
 implicit none
-integer :: Natoms,m,n,input_file,read_Natoms
-
+integer :: Natoms,read_Natoms,i,j
+integer, parameter :: n=3                         ! number of dimension (xyz)
+integer, parameter :: unit_id=11                  ! id number for the unit
+character(len=20) :: file_name
+double precision :: e_tot,V,T,eps,sig,pot,kin
 ! declaring array 
 double precision, allocatable :: xyz(:,:)
-! check allocatiosnn status
+double precision, allocatable :: dist(:,:)
+double precision, allocatable :: vel(:,:)
+double precision, allocatable :: acc(:,:)
+double precision, allocatable :: mass(:)
+
+! check allocation status
 integer :: i_stat
 
+! preparing for reading the input file
+write(*,*)"Write the name of the input file"
+read(*,*)file_name
+open(unit=unit_id, file=trim(file_name), status='old')
 
-
+Natoms=read_Natoms(unit_id)                       ! reading atoms number
 
 ! allocation 2D array
-allocate(xyz(m,n) , stat=i_stat)
+allocate(xyz(Natoms,n) , stat=i_stat)             ! allocation coordinate array
+if(i_stat /= 0) then
+  print *, "MEMORY ALLOCATION FAILED"
+  stop
+end if
+allocate(dist(Natoms,Natoms) , stat=i_stat)       ! allocation distance array
+if(i_stat /= 0) then
+  print *, "MEMORY ALLOCATION FAILED"
+  stop
+end if
+allocate(vel(Natoms,n) , stat=i_stat)             ! allocation velocity array      
+if(i_stat /= 0) then
+  print *, "MEMORY ALLOCATION FAILED"
+  stop
+end if
+allocate(acc(Natoms,n) , stat=i_stat)             ! allocation accelaration array      
+if(i_stat /= 0) then
+  print *, "MEMORY ALLOCATION FAILED"
+  stop
+end if
+allocate(mass(Natoms) , stat=i_stat)             ! allocation mass vector
 if(i_stat /= 0) then
   print *, "MEMORY ALLOCATION FAILED"
   stop
 end if
 
+read(unit_id,*)                                   ! skipping blank line
+call read_mol(unit_id, Natoms, xyz, mass)
+
+! inizializing the velocity array v0=0
+do i=1,n
+ do j=1,Natoms
+  vel(j,i)=0.D0
+ enddo
+enddo
+
+write(*,*)"Write sigma for LJ potential"
+read(*,*)sig
+write(*,*)"Write epsilon for LJ potential"
+read(*,*)eps
+
+write(*,*)"STARTING COORDINATES AND MASS OF EACH ATOM"
+write(*, '(A6, 3A15, A14)') &
+    adjustr("Atom"), &
+    adjustr("x"), &
+    adjustr("y"), &
+    adjustr("z"), &
+    adjustr("mass")
+
+write(*,*) "------------------------------------------------------------------------"
+do i=1,Natoms
+ write(*,'(I6, 3F15.8, F14.8)')i,(xyz(i,j), j=1, 3),mass(i)
+enddo
+
+
+call compute_distances(Natoms, xyz, dist)
+
+kin=T(Natoms,vel,mass)
+write(*,*)"KINETIC ENERGY =",kin
+pot=V(eps,sig,Natoms,dist)
+write(*,*)"POTENTIAL ENERGY =",pot
+e_tot=kin+pot
+write(*,*)"TOTAL ENERGY =",e_tot
+
+
+
 
 
 ! deallocate the array
 deallocate(xyz)
-
-
-
-Natoms=read_Natoms(input_file)  
-
-
-
-
-
-
-
+deallocate(dist)
+deallocate(vel)
+deallocate(acc)
 end program mol_dyn
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -135,8 +132,6 @@ end subroutine compute_distances
 
 
 
-
-
 ! reading atomic data
 subroutine read_mol(input_file, n, c, m)
 implicit none
@@ -146,11 +141,11 @@ integer, intent(in) :: n
 doubleprecision, intent(out) :: c(n,3)
 doubleprecision, intent(out) :: m(n)
 do i=1,n
- read(*,*) c(i,1), c(i,2), c(i,3), m(i)
+ read(input_file,*) c(i,1), c(i,2), c(i,3), m(i)
 end do
 end subroutine read_mol
 
-double precision function v(eps, sig, n, dis)
+double precision function V(eps, sig, n, dis)
         implicit none
         integer ::  i, t
         double precision, intent(in) :: eps, sig
@@ -165,9 +160,10 @@ do i=1,n
   l=(sig/dis(i,t))**12
   p=(sig/dis(i,t))**6
   v=v+d*(l-p)
+  write(*,*)"l=",l,"p=",p,"d=",d,"v=",v,"           i=",i,"t=",t
  end do
 end do
-end function v
+end function V
 
 
 ! calculating the kinetic energy
