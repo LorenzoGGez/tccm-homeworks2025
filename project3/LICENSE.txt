@@ -19,5 +19,15 @@ such as medical and industrials. The code it's not distributable or accessible t
 The code is not usebal for projecting conventional weapons, drugs or chemical weapons.
 The producers can releas patch or updates in any time. Those updates or patchs are not for free, the user
 has to download those patchs or updates in order to keep on using the code. The tecnical support is
-guranted only under payment.
+guranteed only under payment.The software and the whole documentation are strictly 
+protected by copyright, every right not mentioned is producers property. The software
+is furnished without implicit or explicit warrenty. The producers do not guarantee
+the scientific accurancy of the calculation's results. The software may has mistakes.
+The producers are not responsable for any kind of direct or indirect damages, or for
+the loss of any data because of the software. The user accepts to use this software 
+takeing the risk. This license ends in any case of violation of these conditions. At
+the end of the license, the user is expected to uninstull the software and any eventual
+copy. Downloading or using the code, the user declear to had read and accepted the 
+terms of this EULA.
+Enjoy the software! :)
 
