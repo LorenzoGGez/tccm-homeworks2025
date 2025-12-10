@@ -1,0 +1,6 @@
+3 !Natoms, number of atoms for this system of Argon atoms
+2 -1.2 3 39.95   !Coordinates x, y, z and mass of the atoms of the system
+1.5 2 0.0 39.95  !Three atoms in this system, which means three different position
+-4 2.2 0.0 39.95
+120   !Epsilon, Lennard-Jones parameter for Ar
+3.40  !Sigma, Lennard-Jones parameter for Ar
