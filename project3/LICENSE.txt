@@ -1,4 +1,4 @@
-EULA License for ...
+EULA License for moldyn.
 Copyright (C) 2025, Perugia, Via Elce di sotto 8, Italy.
 All rights reserved.
 
