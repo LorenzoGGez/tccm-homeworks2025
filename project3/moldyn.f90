@@ -190,7 +190,7 @@ end function T
 
 
 ! calculating the acceleration for each atom
-subroutine compute_acc(Natoms, coord, mass, dist, acc)
+subroutine compute_acc(Natoms, coord, mass, dist, acc, eps, sig)
         implicit none
         integer, intent(in) :: Natoms
         integer :: i,j
@@ -235,7 +235,7 @@ end subroutine compute_acc
 
 
 
-
+! function calculating the energy potential derivate
 double precision function dpot(eps, sig, r) result(u)
         implicit none
         double precision, intent(in) :: eps, sig
@@ -250,11 +250,31 @@ end function dpot
 
 
 
+subroutine verlet_update(Natoms, coord, mass, dist, eps, sig, vel, dt)
+        implicit none
+        integer, intent(in) :: Natoms
+        integer :: i,j
+        double precision, intent(in) :: dist(Natoms,Natoms)
+        double precision, intent(in) :: mass(Natoms)
+        double precision :: coord(Natoms,3)
+        double precision :: acc(Natoms,3)
+        double precision :: vel(Natoms,3)
+        double precision :: dt, tempacc(3), eps, sig
 
+        
+do i=1,Natoms       
+ call compute_acc(Natoms, coord, mass, dist, acc, eps, sig)
+ do j=1,3
+  tempacc(j)=acc(i,j)                                                          !save the acceleration for the step n
+  coord(i,j)=coord(i,j)+vel(i,j)*dt+(tempacc(j)*dt**2) /2.D0
+ enddo
+ call compute_acc(Natoms, coord, mass, dist, acc, eps, sig)                  !calculating the new accelaration after the change of the posistions
+ do j=1,3
+  vel(i,j)=vel(i,j)+(acc(i,j)+tempacc(j))*dt/2.D0
+ enddo
+enddo
 
-
-
-
+end subroutine verlet_update
 
 
 
