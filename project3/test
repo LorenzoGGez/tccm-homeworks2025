@@ -1,7 +1,8 @@
 4   !Natoms, this number in this very position, specifies the number of atoms of the system. In this file we have Helium atoms.
+
 -2 -1.3 0.0 4.00   !The first three numbers are the coordinates of this atom: x, y, z. The last number is the mass of the atom
 -2.5 -2 0.0 4.00   !Since our system is made of 4 atoms, we'll have to specifie the position and mass of each atom in the system
 -3 -2.3 0.0 4.00
 -3.5 -3 0.0 4.00
-10.22   !This is the epsilon parameter of Lennard-Jones for Helium
-2.56    !This is the sigma parameter of Lennard-Jones for Helium
+0.08431   !This is the epsilon parameter of Lennard-Jones for Helium KJ/mol
+2.56    !This is the sigma parameter of Lennard-Jones for Helium in Angstrom
