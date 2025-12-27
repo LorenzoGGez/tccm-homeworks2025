@@ -28,7 +28,7 @@ Once compiled, you will obtain an executable file to run the program.
 
 1.  Clone the repo
     ```sh
-    git clone [https://github.com/your_username/repo_name.git](https://github.com/your_username/repo_name.git)
+    git clone https://github.com/LorenzoGGez/tccm-homeworks2025.git
     ```
 
 ## 💻 Usage
