@@ -12,7 +12,7 @@ We provide the `.f90` source code so that you can compile and use it on any oper
 
 ## 🚀 Getting Started
 
-To run a simulation, you need to compile the `.f90` file using your preferred Fortran 90 compiler.
+To run a simulation, you need to compile the `.f90` files using your preferred Fortran 90 compiler.
 Below is a list of the most common ones:
 
 | Compiler | Type | Supported OS | Best For |
@@ -39,3 +39,11 @@ After launching the program, it will prompt you for the input filename and the n
 It will then display the initial conditions and the final energy state on the screen, while generating a trajectory output file in the background.
 
 Visualization is supported via **[Molden](https://www3.cmbi.umcn.nl/molden/)**.
+
+Some test run on some function of the program can be achieved by compiling the test program.
+Here we have an example on how to do it with gfortran:
+
+```sh
+    gfortran src/physics.f90 test/test.f90 -o testprog
+```
+
