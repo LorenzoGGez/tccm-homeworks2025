@@ -70,7 +70,7 @@ read(unit_id,*)eps
 write(*,*)"Reading sigma for LJ potential:",eps,"kJ/mol" 
 read(unit_id,*)sig
 write(*,*)"Reading epsilon for LJ potential:",sig,"Angstrom"
-sig=sig*10.D0  ! conversion to nm
+sig=sig/10.D0  ! conversion to nm
 
 
 write(*,*) "------------------------------------------------------------------------"
@@ -110,7 +110,7 @@ do j=1,nstep/10
  write(out_id,*)Natoms
  write(out_id,*)"T=",T(Natoms,vel,mass),"kJ/mol","    V=",V(eps,sig,Natoms,dist),"kJ/mol","    Nstep=",j
  do l=1,Natoms 
-  write(out_id,*)"Ar",xyz(l,1)/10.D0,xyz(l,2)/10.D0,xyz(l,3)/10.D0
+  write(out_id,*)"Ar",xyz(l,1)*10.D0,xyz(l,2)*10.D0,xyz(l,3)*10.D0
  enddo 
 enddo
 
@@ -175,9 +175,9 @@ doubleprecision, intent(out) :: c(n,3)
 doubleprecision, intent(out) :: m(n)
 do i=1,n
  read(input_file,*) c(i,1), c(i,2), c(i,3), m(i)
- c(i,1)=c(i,1)*10.D0                                    ! conversion A->nm
- c(i,2)=c(i,2)*10.D0
- c(i,3)=c(i,3)*10.D0
+ c(i,1)=c(i,1)/10.D0                                    ! conversion A->nm
+ c(i,2)=c(i,2)/10.D0
+ c(i,3)=c(i,3)/10.D0
 end do
 end subroutine read_mol
 
