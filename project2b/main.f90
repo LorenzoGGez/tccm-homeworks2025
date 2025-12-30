@@ -57,3 +57,54 @@ program main
        write(*,*) 'CPU execution time', tcpuend-tcpustart
 
        write(*,*)
+       write(*,*) 'GPU'
+
+       b=b0
+       nit=0
+       error=1
+       tgpustart=omp_get_wtime()
+       do while(error.gt.eps)
+          do k=1,n
+             c(k)=0.d0
+          end do
+          dd=0.d0
+          error=0.d0
+
+          do k=1,n
+           do l=1,n
+              c(k)=c(k)+a(k,l)*b(l)
+           end do
+          end do
+
+          do k=1,n
+             dd=dd+c(k)*c(k)
+          end do
+
+          rootdd=dsqrt(dd)
+
+          do k=1,n
+             c(k)=c(k)/rootdd
+          end do
+
+          do k=1,n
+             error=error+(c(k)-b(k))*(c(k)-b(k))
+          end do
+
+          do k=1,n
+             b(k)=c(k)
+          end do
+          nit=nit+1
+          if (nit.gt.nmax) then
+                  write(*,*) 'No convergence'
+                  exit
+          end if
+       end do
+
+       tgpuend=omp_get_wtime()
+       lamb=0.d0
+       lamb=dot_product(b,matmul(a,b))/dot_product(b,b)
+       write(*,*) 'Tot. iterations', nit
+       write(*,*) 'lamb', lamb
+       write(*,*) 'GPU execution time', tgpuend-tgpustart
+
+       write(*,*)
