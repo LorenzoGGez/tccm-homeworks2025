@@ -7,7 +7,7 @@ implicit none
 contains
 
 
-
+! subroutine for reading matrices file input
 subroutine read_matrix(unit_id, ndim, R, C, V)
 implicit none
 integer :: ndim, i, notz, unit_id, i_stat
@@ -51,6 +51,9 @@ write(*,*) V
 
 end subroutine read_matrix
 
+
+
+! subroutine to multiply sparse matrices to obdain non-sparse format one
 subroutine sparse_multiplication(R1, C1, V1, R2, C2, V2, C, n_mul, ndim)
 implicit none
 integer :: p1, p2, i, j
@@ -67,19 +70,19 @@ C=0.D0
 n_mul=0
 
 ! multiplication
-do j=1, ndim        !rows of B
- do i=j, ndim    !rows of A  (exploiting the simmetry  of the matrices)
-  y = 0.0d0    !accumulator for the new matrix element
-  do p1=R1(i)+1,R1(i+1)   !number of non zero element per row of A
-   do p2=R2(j)+1,R2(j+1)    !number of non zero element per row of B 
+do j=1, ndim                                             ! rows of B
+ do i=j, ndim                                            ! rows of A  (exploiting the simmetry  of the matrices)
+  y = 0.0d0                                              ! accumulator for the new matrix element
+  do p1=R1(i)+1,R1(i+1)                                  ! number of non zero element per row of A
+   do p2=R2(j)+1,R2(j+1)                                 ! number of non zero element per row of B 
     if (C1(p1) == C2(p2)) then
      y=y+V1(p1)*V2(p2)
-     n_mul=n_mul+1 
+     n_mul=n_mul+1                                       ! counting the number of multiplications
     endif
    enddo
   enddo
   C(i,j) = y
-  C(j,i) = y
+  C(j,i) = y                                             ! simmetrizing the matrix (optional)
  enddo
 enddo
 
@@ -87,6 +90,49 @@ enddo
 
 end subroutine sparse_multiplication
 
+
+! subroutine for turning the sparse format to non-sparse
+subroutine desparsification(R, C, V, mat, ndim)
+implicit none
+integer, allocatable, intent(in) :: R(:), C(:)
+double precision, allocatable, intent(in) :: V(:)
+integer, intent(in) :: ndim
+double precision, intent(out) :: mat(:,:)
+integer :: i, j, rowstart, rowend
+
+mat=0.D0
+do i=1, ndim                                    ! do over the row
+ rowstart=R(i)                                  ! wher the row with value start
+ rowend=R(i+1)                                  ! where it ends
+ do j=rowstart+1,rowend                         ! do within the column with non zero element for that row
+  mat(i,C(j))=V(j)                              ! assigning the the vlue to the matrix element
+ enddo
+enddo
+
+
+end subroutine desparsification
+
+! simple fortran matrix multiplication
+subroutine matrices_prod(A, B, C, Adim)
+implicit none
+double precision, intent(in) :: A(:,:), B(:,:)
+double precision, intent(out) :: C(:,:)
+integer, intent(in) :: Adim
+integer :: i, j, k
+double precision :: y
+
+C=0.D0                                          ! inizializing the product matrix
+do i=1,Adim                                   
+ do j=i,Adim
+  do k=1,Adim
+   C(j,i)=C(j,i)+A(j,k)*B(k,i)
+  enddo
+  C(i,j)=C(j,i)
+ enddo
+enddo
+
+
+end subroutine matrices_prod
 
 
 
