@@ -122,11 +122,12 @@ integer :: i, j, k
 double precision :: y
 
 C=0.D0                                          ! inizializing the product matrix
-do i=1,Adim                                     ! loop over the
- do j=1,Adim
+do i=1,Adim                                   
+ do j=i,Adim
   do k=1,Adim
    C(j,i)=C(j,i)+A(j,k)*B(k,i)
   enddo
+  C(i,j)=C(j,i)
  enddo
 enddo
 

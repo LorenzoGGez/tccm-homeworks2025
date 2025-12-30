@@ -96,6 +96,17 @@ do i=1, n
 enddo
 
 
+! matrix multiplication with non-sparse format with DGEMM
+call dgemm('N','N',n,n,n,1.D0,mat1,n,mat2,n,0.D0,C,n)
+
+write(*,*)"Matrix product with DGEMM"
+do i=1, n
+ write(*,'(*(F12.6,1X))')C(i,:)
+enddo
+
+
+
+
 
 deallocate(R1, C1, V1, R2, C2, V2, C, mat1, mat2)
 end program main
