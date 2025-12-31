@@ -63,33 +63,35 @@ program main
        nit=0
        error=1
        tgpustart=omp_get_wtime()
+       !$omp target data map(a,b,c)
        do while(error.gt.eps)
+          !$omp target teams distribute parallel do
           do k=1,n
              c(k)=0.d0
           end do
           dd=0.d0
           error=0.d0
-
+          !$omp target teams distribute parallel do
           do k=1,n
            do l=1,n
               c(k)=c(k)+a(k,l)*b(l)
            end do
           end do
-
+          !$omp target teams distribute parallel do reduction(+:dd)
           do k=1,n
              dd=dd+c(k)*c(k)
           end do
 
           rootdd=dsqrt(dd)
-
+          !$omp target teams distribute parallel do
           do k=1,n
              c(k)=c(k)/rootdd
           end do
-
+          !$omp target teams distribute parallel do reduction(+:error)
           do k=1,n
              error=error+(c(k)-b(k))*(c(k)-b(k))
           end do
-
+          !$omp target teams distribute parallel do
           do k=1,n
              b(k)=c(k)
           end do
@@ -99,7 +101,7 @@ program main
                   exit
           end if
        end do
-
+       !$omp end target data
        tgpuend=omp_get_wtime()
        lamb=0.d0
        lamb=dot_product(b,matmul(a,b))/dot_product(b,b)
@@ -108,3 +110,42 @@ program main
        write(*,*) 'GPU execution time', tgpuend-tgpustart
 
        write(*,*)
+       write(*,*) 'CPU EXPLICIT FUNCTION'
+
+       b=b0
+       c=0.d0
+       nit=0
+       error=1
+       tcpustart=omp_get_wtime()
+       do while(error.gt.eps)
+          c=0.d0
+          dd=0.d0
+          error=0.d0
+          do k=1,n
+           do l=1,n
+            c(k)=c(k)+a(k,l)*b(l)
+           end do
+          end do
+
+          c=c/dsqrt(dd)
+
+          do k=1,n
+           error=error+(c(k)-b(k))*(c(k)-b(k))
+          end do
+
+          b=c
+          nit=nit+1
+          if (nit.gt.nmax) then
+                  write(*,*) 'No convergence'
+                  exit
+          end if
+       end do
+       tcpuend=omp_get_wtime()
+       write(*,*) 'Tot. iterations', nit
+       lamb=0.d0
+       lamb=dot_product(b,matmul(a,b))/dot_product(b,b)
+       write(*,*) 'lamb', lamb
+       write(*,*) 'CPU execution time', tcpuend-tcpustart
+deallocate(a,b,c,b0)
+return
+end program main
