@@ -126,6 +126,9 @@ program main
             c(k)=c(k)+a(k,l)*b(l)
            end do
           end do
+          do k=1,n
+          dd=dd+c(k)*c(k)
+          end do
 
           c=c/dsqrt(dd)
 
