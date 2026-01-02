@@ -11,20 +11,28 @@ program main
         write(*,*) 'matrix size'
         read(*,*) n
         write(*,*) n
-        allocate(a(n:n))
+        allocate(a(n,n))
         a=0.0d0
         do i=1,n-1
            j=i+1
            a(i,j)=1.0d0
            a(j,i)=1.0d0
         end do
-        write(*,*)
 
-       !Requesting treshold's convergence
+
+        write(*,*)
+        !Request convergence threshold
+        write(*,*) 'convergence threshold'
+        read(*,*) eps
+        write(*,*) eps
+
+
+       write(*,*)
+       !Requesting maximum number of iteration
        write(*,*) 'max iteration number'
        read(*,*) nmax
        write(*,*) nmax
-
+       
        !Random vector
        allocate(b(n),b0(n))
        call random_number(b)
