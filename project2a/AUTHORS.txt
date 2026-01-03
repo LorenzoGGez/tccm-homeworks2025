@@ -1,0 +1,4 @@
+AUTHORS
+
+-Diego Biagiola
+-Lorenzo Gialli
