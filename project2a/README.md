@@ -47,3 +47,6 @@ Here we have an example on how to do it with gfortran:
 ```sh
     gfortran src/sparse_mod.f90 test/test.f90 -o testprog -lblas
 ```
+
+The test program work similarly to the complete one, but it executes the routines just once and you can chose which one to use from the three, in order
+to get some preliminary information and check the result of the matrices product.
