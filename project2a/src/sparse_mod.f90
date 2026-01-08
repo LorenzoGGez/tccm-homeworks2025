@@ -26,7 +26,7 @@ if(i_stat /= 0) then
   stop
 end if
 read(unit_id,*) R
-!write(*,*) R
+write(*,*) R
 
 ! determine the lenght of C and V (the last value of R is the lenght)
 notz=R(ndim+1)
@@ -38,7 +38,7 @@ if(i_stat /= 0) then
   stop
 end if
 read(unit_id,*) C
-!write(*,*) C
+write(*,*) C
 
 ! V array allocation and read
 allocate(V(notz), stat=i_stat)
@@ -47,7 +47,7 @@ if(i_stat /= 0) then
   stop
 end if
 read(unit_id,*) V
-!write(*,*) V
+write(*,*) V
 
 end subroutine read_matrix
 
